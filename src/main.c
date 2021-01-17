@@ -1,13 +1,16 @@
 #include <glew.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <glfw3.h>
+#include <portaudio.h>
+#include <gl_error_wrapper.h>
+#include <shader.h>
+
+#include "window/window.h"
 
 
-void callback(GLFWwindow* window, int w, int h)
-{
-    glViewport(0,0,w,h);
-    printf("%d %d\n",h,w);
-};
+#define DEBUG 0
+
 
 
 int main()
@@ -25,25 +28,25 @@ int main()
     glfwMakeContextCurrent(window);
 
     //init glew
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
+    GLenum glew_err = glewInit();
+    if (GLEW_OK != glew_err)
     {
         /* Problem: glewInit failed, something is seriously wrong. */
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(glew_err));
         return -1;
     }
 
-    glfwSetWindowSizeCallback(window,callback);
+    glfwSetWindowSizeCallback(window,window_resize_callback);
+
 
     while (!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        GL(glClear(GL_COLOR_BUFFER_BIT));
 
         glfwSwapBuffers(window);
 
         glfwPollEvents();
     }
-    
 
     glfwTerminate();
 }
