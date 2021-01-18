@@ -5,6 +5,7 @@
 #include <portaudio.h>
 #include <gl_error_wrapper.h>
 #include <shader.h>
+#include <loader.h>
 
 #include "window/window.h"
 
@@ -21,11 +22,11 @@ int main()
         return -1;
 
 
-    GLFWwindow* window = glfwCreateWindow(1080,720,"",0,0);
-
+    GLFWwindow* window = glfwCreateWindow(1080,720,"",0,0);\
 
     glfwShowWindow(window);
     glfwMakeContextCurrent(window);
+    sgd_window_init(window);
 
     //init glew
     GLenum glew_err = glewInit();
@@ -36,8 +37,7 @@ int main()
         return -1;
     }
 
-    glfwSetWindowSizeCallback(window,window_resize_callback);
-
+    glfwSetWindowSizeCallback(window,sgd_window_resize_callback);    
 
     while (!glfwWindowShouldClose(window))
     {

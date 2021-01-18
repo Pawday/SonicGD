@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 set(MODULE sgd_window)
 
 add_library(sgd_window STATIC
-    resize_callback.c
+    window.c
 )
 
 
