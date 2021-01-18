@@ -40,3 +40,7 @@ add_executable(${PROJECT_NAME} src/main.c)
         add_subdirectory(src/shader)
         target_include_directories(${PROJECT_NAME} PRIVATE ${sgd_shader_INCLUDE_DIRS})
         target_link_libraries(${PROJECT_NAME} sgd_shader)
+    #loader module
+        add_subdirectory(src/loader)
+        target_include_directories(${PROJECT_NAME} PRIVATE ${sgd_loader_INCLUDE_DIRS})
+        target_link_libraries(${PROJECT_NAME} sgd_loader)
