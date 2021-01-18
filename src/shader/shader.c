@@ -5,7 +5,7 @@
 #include <gl_error_wrapper.h>
 
 
-/*local*/ check_compile_status(int shader_id);
+static void check_compile_status(int shader_id);
 
 ShaderProgramm create_shader_programm(char* vertex_source, char* fragment_source)
 {
@@ -15,9 +15,6 @@ ShaderProgramm create_shader_programm(char* vertex_source, char* fragment_source
     programm.vertex_shader_id = GL(glCreateShader(GL_VERTEX_SHADER));
     programm.fragment_shader_id = GL(glCreateShader(GL_FRAGMENT_SHADER));
     
-
-    // int vertex_src_length = strlen(vertex_source);
-    // int fragment_src_length = strlen(fragment_source);
     GL(glShaderSource(programm.vertex_shader_id,1,&vertex_source,(void*)0));
     GL(glShaderSource(programm.fragment_shader_id,1,&fragment_source,(void*)0));
 
@@ -34,7 +31,7 @@ ShaderProgramm create_shader_programm(char* vertex_source, char* fragment_source
     return programm;
 }
 
-check_compile_status(int shader_id)
+void check_compile_status(int shader_id)
 {
     GLint res = GL_FALSE;
 	int info_log_size;
@@ -43,7 +40,7 @@ check_compile_status(int shader_id)
     glGetShaderiv(shader_id, GL_COMPILE_STATUS, &res);
 	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &info_log_size);
 
-    
+
 
 	if (info_log_size > 0)
     {
