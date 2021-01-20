@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.10)
 #project name
 project(SonicGD)
 
+
+if(CMAKE_BUILD_TYPE STREQUAL Debug)
+    add_compile_definitions(DEBUG)
+endif()
+
 #adding libraries
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/glew/build/cmake)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/glfw)

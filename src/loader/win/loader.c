@@ -15,11 +15,20 @@ static char* error_string = NULL;
 char* sgd_loader_load_resource(char* resource_file_path, size_t* resource_size)
 {
     //prepare file path
-    int final_res_file_path_len = strlen(resource_file_path) + sizeof(SGD_RESOURCE_DIRECTORY);
-    char* final_res_file_path = (char*) malloc(final_res_file_path_len);
+    int final_res_file_path_len = strlen(resource_file_path) + sizeof(SGD_RESOURCE_DIRECTORY) + 1; //with cstring_zero
+    char* final_res_file_path = (char*)malloc(final_res_file_path_len);
+
+    if (final_res_file_path == NULL)
+    {
+        //TODO: create debug logging system
+        #ifdef DEBUG
+        fprintf(stderr, "Memory Allocation error in %s %d loading resource_file_path %s", __FILE__, __LINE__, resource_file_path);
+        #endif
+        exit(-1);
+    }
 
     //fill path_str_buffer to zeros
-    memset(final_res_file_path,0,final_res_file_path_len);
+    final_res_file_path = memset(final_res_file_path,0,final_res_file_path_len);
 
     // res_dir + / + path
     strcpy(final_res_file_path,SGD_RESOURCE_DIRECTORY);
@@ -38,7 +47,7 @@ char* sgd_loader_load_resource(char* resource_file_path, size_t* resource_size)
     {
         char* file_open_error_string = "Could not open file ";
 
-        error_string = realloc(error_string,strlen(file_open_error_string) + strlen(final_res_file_path) + 1);
+        error_string = realloc(error_string,strlen(file_open_error_string) + strlen(final_res_file_path) + 1); //with cstring_zero
         memset(error_string,0,strlen(file_open_error_string) + strlen(final_res_file_path) + 1);
 
         strcpy(error_string,file_open_error_string);
@@ -50,9 +59,9 @@ char* sgd_loader_load_resource(char* resource_file_path, size_t* resource_size)
         return NULL;
     }
     
-    char* buffer = malloc(BUFFER_SIZE);
+    char* buffer = malloc(BUFFER_SIZE); //0x000001e74830c630
     char* resource_content = malloc(BUFFER_SIZE);
-
+    
 
     char is_file_end = 0;
 
@@ -85,7 +94,7 @@ char* sgd_loader_load_string_resource(char* resource_string_file_path)
     size_t string_resourse_size;
     char* string_resourse = sgd_loader_load_resource(resource_string_file_path,&string_resourse_size);
 
-    realloc(string_resourse,string_resourse_size + 1);
+    string_resourse = realloc(string_resourse,string_resourse_size + 1);
     
     *(string_resourse + string_resourse_size) = (char)0;
 
