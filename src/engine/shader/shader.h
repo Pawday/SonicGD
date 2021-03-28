@@ -12,6 +12,4 @@ typedef struct ShaderProgramm
 ShaderProgramm create_shader_programm(char* vertex_source, char* fragment_source);
 
 
-void update_ratio_uniform(int programm_id,int uniform_location);
-
 #endif

@@ -33,17 +33,6 @@ ShaderProgramm create_shader_programm(char* vertex_source, char* fragment_source
 }
 
 
-void update_ratio_uniform(int programm_id,int uniform_location)
-{
-    int width;
-    int heigth;
-    sgd_window_get_size(&width,&heigth);
-
-    GL(glUseProgram(programm_id));
-    float win_rat = (float) width / heigth;
-    GL(glUniform1f(uniform_location,win_rat));
-}
-
 void check_compile_status(int shader_id)
 {
     GLint res = GL_FALSE;
@@ -54,12 +43,19 @@ void check_compile_status(int shader_id)
 	glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &info_log_size);
 
 
-
+    
 	if (info_log_size > 0)
     {
+        #ifdef DEBUG
         char* error_message = malloc(info_log_size + 1);
 
 		glGetShaderInfoLog(shader_id, info_log_size, (void*) 0, error_message);
-		printf("%s\n", error_message);
+        
+		sprintf(stderr,"%s\n", error_message);
+        #else
+        exit(-1);
+        #endif
 	}
+    
+    
 }

@@ -4,17 +4,32 @@ cmake_minimum_required(VERSION 3.10)
 project(SonicGD)
 
 
+#platform settings
+    #WIN32
+    if(WIN32)
+        set(CMAKE_USE_WIN32_THREADS_INIT ON)
+    endif(WIN32)
+    
+
+
 if(CMAKE_BUILD_TYPE STREQUAL Debug)
     add_compile_definitions(DEBUG)
+    set(WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-#adding libraries
+
+#adding libraries sources directoris
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/glew/build/cmake)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/glfw)
 add_subdirectory(${CMAKE_SOURCE_DIR}/libs/portaudio)
 
 
+#disable link shared library glew
+set_target_properties(glew PROPERTIES EXCLUDE_FROM_ALL TRUE)
+
+
 add_executable(${PROJECT_NAME} src/main.c)
+
 
 
 #set global libraries include path short names
@@ -25,27 +40,16 @@ add_executable(${PROJECT_NAME} src/main.c)
     target_include_directories(${PROJECT_NAME} PRIVATE ${GLFW_INCLUDE})
     target_include_directories(${PROJECT_NAME} PRIVATE ${GLEW_INCLUDE})
 
+
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/engine)
+
+
 #link libraries
     target_link_libraries(${PROJECT_NAME} glfw)
     target_link_libraries(${PROJECT_NAME} glew_s)
     target_link_libraries(${PROJECT_NAME} portaudio_static)
+    target_link_libraries(${PROJECT_NAME} sgd_engine)
 
 
-#building modules
-    #window module
-        add_subdirectory(src/window)
-        target_include_directories(${PROJECT_NAME} PRIVATE ${sgd_window_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} sgd_window)
-    #common module
-        add_subdirectory(src/common)
-        # #gl error wrapper
-            target_include_directories(${PROJECT_NAME} PUBLIC ${sgd_error_wrapper_INCLUDE_DIRS})
-            target_link_libraries(${PROJECT_NAME} sgd_error_wrapper)
-    #shader module
-        add_subdirectory(src/shader)
-        target_include_directories(${PROJECT_NAME} PRIVATE ${sgd_shader_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} sgd_shader)
-    #loader module
-        add_subdirectory(src/loader)
-        target_include_directories(${PROJECT_NAME} PRIVATE ${sgd_loader_INCLUDE_DIRS})
-        target_link_libraries(${PROJECT_NAME} sgd_loader)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})

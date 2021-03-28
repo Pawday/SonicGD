@@ -4,23 +4,18 @@
 #include <glfw3.h>
 #include <portaudio.h>
 #include <gl_error_wrapper.h>
-#include <shader.h>
-#include <loader.h>
-
-#include "window/window.h"
-
-
-#define DEBUG 0
-
-
+#include <window.h>
 
 int main()
 {
-    
     //init glfw
     if (!glfwInit())
         return -1;
 
+
+    #ifdef DEBUG
+    printf("DEBUG MOD ON\n");
+    #endif
 
     GLFWwindow* window = glfwCreateWindow(1080,720,"",0,0);\
 
@@ -44,7 +39,6 @@ int main()
         GL(glClear(GL_COLOR_BUFFER_BIT));
 
         glfwSwapBuffers(window);
-
         glfwPollEvents();
     }
 
